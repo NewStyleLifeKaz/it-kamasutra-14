@@ -1,25 +1,25 @@
 import classes from './Navbar.module.css';
 
-
 const Navbar = () => {
 	return (
 		<nav className={classes.nav}>
 			<div className={classes.item}>
-				<a>Profile</a>
+				<a href="/profile">Profile</a>
 			</div>
 			<div className={`${classes.item} ${classes.active}`}>
-				<a>Messages</a>
+				<a href="/dialogs">Messages</a>
 			</div>
 			<div className={classes.item}>
-				<a>News</a>
+				<a href="/News">News</a>
 			</div>
 			<div className="item">
-				<a>Music</a>
+				<a href="/Music">Music</a>
 			</div>
 			<div className="item">
-				<a>Settings</a>
+				<a href="/Settings">Settings</a>
 			</div>
-		</nav>);
+		</nav>
+	);
 }
 
 export default Navbar;
