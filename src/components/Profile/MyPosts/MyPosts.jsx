@@ -3,14 +3,15 @@ import Post from './Post/Post';
 
 const MyPosts = () => {
 	return (
-		<div>
-			My posts
+		<div className={s.postsBlock}>
+			<h3>My posts</h3>
 			<div>
-				New post
-			</div>
-			<div>
-				<textarea></textarea>
-				<button>Add button</button>
+				<div>
+					<textarea></textarea>
+				</div>
+				<div>
+					<button>Add button</button>
+				</div>
 			</div>
 			<div className={s.posts}>
 				<Post message='1 Privet' LikesCount='0' />
