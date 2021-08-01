@@ -1,5 +1,5 @@
-import s from './MyPosts.module.css';
 import Post from './Post/Post';
+import s from './MyPosts.module.css';
 
 const MyPosts = (props) => {
 
@@ -14,6 +14,12 @@ const MyPosts = (props) => {
 
 	let postsElements = props.posts.map(p => <Post message={p.message} LikesCount={p.LikesCount} />)
 
+
+
+	let addPost = () => {
+		alert('samurai')
+	}
+
 	return (
 		<div className={s.postsBlock}>
 			<h3>My posts</h3>
@@ -22,7 +28,7 @@ const MyPosts = (props) => {
 					<textarea></textarea>
 				</div>
 				<div>
-					<button>Add button</button>
+					<button onClick={addPost}>Add button</button>
 				</div>
 			</div>
 			<div className={s.posts}>
