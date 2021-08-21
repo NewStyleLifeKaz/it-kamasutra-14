@@ -1,8 +1,8 @@
 import './App.css';
 import Header from './components/Header/Header';
 import Navbar from './components/Navbar/Navbar';
+import DialogsContainer from './components/Dialogs/DialogsContainer';
 import Profile from './components/Profile/Profile';
-import Dialogs from './components/Dialogs/Dialogs';
 import { BrowserRouter, Route } from 'react-router-dom';
 
 
@@ -22,11 +22,9 @@ const App = (props) => {
 					<Route path="/Settings" /> */}
 
 					<Route /* exact */ path="/Dialogs"
-						render={() => <Dialogs store={props.store} />} />
+						render={() => <DialogsContainer store={props.store} />} />
 					<Route path="/Profile"
-						render={() => <Profile
-							profilePage={props.state.profilePage}
-							dispatch={props.dispatch} />} />
+						render={() => <Profile store={props.store} />} />
 					<Route path="/News" />
 					<Route path="/Music" />
 					<Route path="/Settings" />
