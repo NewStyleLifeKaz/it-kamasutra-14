@@ -22,9 +22,9 @@ const App = (props) => {
 					<Route path="/Settings" /> */}
 
 					<Route /* exact */ path="/Dialogs"
-						render={() => <DialogsContainer store={props.store} />} />
+						render={() => <DialogsContainer />} />
 					<Route path="/Profile"
-						render={() => <Profile store={props.store} />} />
+						render={() => <Profile />} />
 					<Route path="/News" />
 					<Route path="/Music" />
 					<Route path="/Settings" />
