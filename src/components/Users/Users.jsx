@@ -5,14 +5,10 @@ import React from "react";
 
 
 class Users extends React.Component {
+	// constructor(props) {
+	// 	super(props);
+	// }
 
-	constructor(props) {
-		super(props);
-		alert('New');
-		axios.get('https://social-network.samuraijs.com/api/1.0/users').then(response => {
-			this.props.setUsers(response.data.items);
-		});
-	};
 	// props.setUsers([
 	// 	{
 	// 		id: 1, photoUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTf-YY4QxFp_OK4ytMjHDRKl-SYDDDEDZk7jw&usqp=CAU',
@@ -27,6 +23,11 @@ class Users extends React.Component {
 	// 		followed: true, fullName: 'Sveta', status: 'So cool', location: { city: 'Kiev', country: 'Ukraine' }
 	// 	},
 	// ])
+	componentDidMount() {
+		axios.get('https://social-network.samuraijs.com/api/1.0/users').then(response => {
+			this.props.setUsers(response.data.items);
+		});
+	}
 
 	render() {
 		return <div>
