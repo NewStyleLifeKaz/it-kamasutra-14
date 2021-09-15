@@ -2,9 +2,9 @@ import './App.css';
 import Header from './components/Header/Header';
 import Navbar from './components/Navbar/Navbar';
 import DialogsContainer from './components/Dialogs/DialogsContainer';
-import Profile from './components/Profile/Profile';
 import { BrowserRouter, Route } from 'react-router-dom';
 import UsersContainer from './components/Users/UsersContainer';
+import ProfileContainer from './components/Profile/ProfileContainer';
 
 
 
@@ -22,16 +22,12 @@ const App = (props) => {
 					<Route path="/Music" />
 					<Route path="/Settings" /> */}
 
-					<Route /* exact */ path="/Dialogs" render={() => <DialogsContainer />} />
-					<Route path="/Profile"
-						render={() => <Profile />} />
-
-					<Route path="/Users"
-						render={() => <UsersContainer />} />
-
-					< Route path="/News" />
-					<Route path="/Music" />
-					<Route path="/Settings" />
+					<Route /* exact */ path="/dialogs" render={() => <DialogsContainer />} />
+					<Route path="/profile" render={() => <ProfileContainer />} />
+					<Route path="/users" render={() => <UsersContainer />} />
+					<Route path="/news" />
+					<Route path="/music" />
+					<Route path="/settings" />
 
 				</div>
 			</div>
