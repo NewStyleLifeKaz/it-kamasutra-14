@@ -1,9 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { follow, setCurrentPage, setTotalUsersCount, setUsers, toggleFollowingProgress, toggleIsFetching, unfollow } from '../../redux/users-reducer';
+import { follow, getUsersThunk, setCurrentPage, unfollow } from '../../redux/users-reducer';
 import Users from './Users';
 import Preloader from '../common/Preloader/Preloader';
-import { userAPI } from '../api/api';
 
 
 class UsersContainer extends React.Component {
@@ -26,20 +25,23 @@ class UsersContainer extends React.Component {
 	// 	},
 	// ])
 	componentDidMount() {
-		this.props.toggleIsFetching(true);
+		this.props.getUsersThunk(this.props.currentPage, this.props.pageSize);
+		/* this.props.toggleIsFetching(true);
 		userAPI.getUsers(this.props.currentPage, this.props.pageSize).then(data => {
 			this.props.toggleIsFetching(false);
 			this.props.setUsers(data.items);
 			this.props.setTotalUsersCount(data.totalCount);
-		});
+		}); */
 	}
 	onCurrentPage = (pageNumber) => {
-		this.props.toggleIsFetching(true);
+		this.props.setCurrentPage(pageNumber);
+		this.props.getUsersThunk(pageNumber, this.props.pageSize);
+		/* this.props.toggleIsFetching(true);
 		this.props.setCurrentPage(pageNumber);
 		userAPI.getUsers(pageNumber, this.props.pageSize).then(data => {
 			this.props.toggleIsFetching(false);
 			this.props.setUsers(data.items);
-		});
+		}); */
 	}
 
 	render() {
@@ -52,8 +54,7 @@ class UsersContainer extends React.Component {
 				users={this.props.users}
 				unfollow={this.props.unfollow}
 				follow={this.props.follow}
-				followingInProgress={this.props.followingInProgress}
-				toggleFollowingProgress={this.props.toggleFollowingProgress} />
+				followingInProgress={this.props.followingInProgress} />
 		</>
 	}
 };
@@ -92,6 +93,4 @@ let mapStateToProps = (state) => {
 // 	}
 // }
 
-export default connect(mapStateToProps, {
-	follow, unfollow, setUsers, setCurrentPage, setTotalUsersCount, toggleIsFetching, toggleFollowingProgress
-})(UsersContainer);
+export default connect(mapStateToProps, { follow, unfollow, setCurrentPage, getUsersThunk })(UsersContainer);
