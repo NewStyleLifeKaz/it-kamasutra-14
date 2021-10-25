@@ -27,12 +27,13 @@ const authReducer = (state = initialState, action) => {
 export const setAuthUserData = (email, id, login, isAuth) => ({ type: SET_USER_DATA, payload: { email, id, login, isAuth } });
 
 export const getAuthUserDataThunk = () => (dispatch) => {
-	authAPI.me().then(response => {
-		if (response.data.resultCode === 0) {
-			let { email, id, login } = response.data.data;
-			dispatch(setAuthUserData(email, id, login, true));
-		}
-	});
+	return authAPI.me()
+		.then(response => {
+			if (response.data.resultCode === 0) {
+				let { email, id, login } = response.data.data;
+				dispatch(setAuthUserData(email, id, login, true));
+			}
+		});
 };
 
 export const login = (email, password, rememberMe) => (dispatch) => {

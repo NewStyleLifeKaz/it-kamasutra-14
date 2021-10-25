@@ -1,19 +1,19 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getAuthUserDataThunk, logout } from '../../redux/auth-reducer';
+import { logout } from '../../redux/auth-reducer';
 import Header from './Header';
 
 class HeaderContainer extends React.Component {
-	componentDidMount() {
-		this.props.getAuthUserDataThunk()
-		/* authAPI.me()
-			.then(response => {
-				if (response.data.resultCode === 0) {
-					let { email, id, login } = response.data.data;
-					this.props.setAuthUserData(email, id, login);
-				}
-			}); */
-	}
+	// componentDidMount() {
+	// 	this.props.getAuthUserDataThunk()
+	// 	/* authAPI.me()
+	// 		.then(response => {
+	// 			if (response.data.resultCode === 0) {
+	// 				let { email, id, login } = response.data.data;
+	// 				this.props.setAuthUserData(email, id, login);
+	// 			}
+	// 		}); */
+	// }
 	render() {
 		return <Header {...this.props} />
 	}
@@ -26,4 +26,4 @@ let mapStateToProps = (state) => {
 	}
 }
 
-export default connect(mapStateToProps, { getAuthUserDataThunk, logout })(HeaderContainer);
+export default connect(mapStateToProps, { logout })(HeaderContainer);
