@@ -92,6 +92,7 @@ export const toggleFollowingProgress = (isFetching, userId) => ({ type: TOGGLE_I
 export const getUsersThunk = (currentPage, pageSize) => {
 	return (dispatch) => {
 		dispatch(toggleIsFetching(true));
+		//dispatch(setCurrentPage(currentPage));//! можно сюда добавить текущую странницу убрав в UserContainer
 		userAPI.getUsers(currentPage, pageSize).then(data => {
 			dispatch(toggleIsFetching(false));
 			dispatch(setUsers(data.items));
