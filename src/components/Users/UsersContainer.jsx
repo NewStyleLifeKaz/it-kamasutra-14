@@ -33,7 +33,8 @@ class UsersContainer extends React.Component {
 	// 	},
 	// ])
 	componentDidMount() {
-		this.props.getUsersThunk(this.props.currentPage, this.props.pageSize);
+		const { currentPage, pageSize } = this.props;
+		this.props.getUsersThunk(currentPage, pageSize);
 		/* this.props.toggleIsFetching(true);
 		userAPI.getUsers(this.props.currentPage, this.props.pageSize).then(data => {
 			this.props.toggleIsFetching(false);
@@ -42,8 +43,10 @@ class UsersContainer extends React.Component {
 		}); */
 	}
 	onCurrentPage = (pageNumber) => {
+		const { pageSize } = this.props;
+		//lesson 90
 		this.props.setCurrentPage(pageNumber);
-		this.props.getUsersThunk(pageNumber, this.props.pageSize);
+		this.props.getUsersThunk(pageNumber, pageSize);
 		/* this.props.toggleIsFetching(true);
 		this.props.setCurrentPage(pageNumber);
 		userAPI.getUsers(pageNumber, this.props.pageSize).then(data => {

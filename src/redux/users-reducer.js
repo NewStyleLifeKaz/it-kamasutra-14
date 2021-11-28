@@ -1,4 +1,5 @@
 import { userAPI } from "../components/api/api";
+import { updateObjectInArray } from "../components/Utils/object-helper";
 
 const FOLLOW = 'Follow';
 const UNFOLLOW = 'Unfollow';
@@ -20,28 +21,30 @@ let initialState = {
 
 const usersReducer = (state = initialState, action) => {
 	switch (action.type) {
-		case 'FAKE': return { ...state, fake: state.fake + 1 }
+		//case 'FAKE': return { ...state, fake: state.fake + 1 }
 		case FOLLOW:
 			return {
 				...state,
 				//!users: [...state.users],
 				//!users: state.users.map(u => u),  - Две записи в коменнтах идентичны
-				users: state.users.map(u => {
-					if (u.id === action.userId) {
-						return { ...u, followed: true }
-					}
-					return u
-				})
+				// users: state.users.map(u => {
+				// 	if (u.id === action.userId) {
+				// 		return { ...u, followed: true }
+				// 	}
+				// 	return u
+				// })
+				users: updateObjectInArray(state.users, action.userId, 'id', { followed: true })
 			}
 		case UNFOLLOW: {
 			return {
 				...state,
-				users: state.users.map(u => {
-					if (u.id === action.userId) {
-						return { ...u, followed: false }
-					}
-					return u
-				})
+				// users: state.users.map(u => {
+				// 	if (u.id === action.userId) {
+				// 		return { ...u, followed: false }
+				// 	}
+				// 	return u
+				// })
+				users: updateObjectInArray(state.users, action.userId, 'id', { followed: false })
 			}
 		}
 		case SET_USERS: {
@@ -91,48 +94,136 @@ export const setTotalUsersCount = (totalUsersCount) => ({ type: SET_TOTAL_USERS_
 export const toggleIsFetching = (isFetching) => ({ type: TOGGLE_IS_FETCHING, isFetching });
 export const toggleFollowingProgress = (isFetching, userId) => ({ type: TOGGLE_IS_FOLLOWING_PROGRESS, isFetching, userId });
 
+// requestUsers=(currentPage,pageSize)
 export const getUsersThunk = (currentPage, pageSize) => {
-	return (dispatch) => {
+	return async (dispatch) => {
 		dispatch(toggleIsFetching(true));
 		//dispatch(setCurrentPage(currentPage));//! можно сюда добавить текущую странницу убрав в UserContainer
-		userAPI.getUsers(currentPage, pageSize).then(data => {
-			dispatch(toggleIsFetching(false));
-			dispatch(setUsers(data.items));
-			dispatch(setTotalUsersCount(data.totalCount));
-		});
+		let data = await userAPI.getUsers(currentPage, pageSize);
+		//.then(data => {
+		dispatch(toggleIsFetching(false));
+		dispatch(setUsers(data.items));
+		dispatch(setTotalUsersCount(data.totalCount));
+		//});
 	}
 };
+
+const followUnfollowFlow = async (dispatch, userId, apiMethod, actionCreator) => {
+	dispatch(toggleFollowingProgress(true, userId));
+
+	let response = await apiMethod(userId);
+	if (response.data.resultCode == 0) {
+		dispatch(actionCreator(userId));
+	}
+	dispatch(toggleFollowingProgress(false, userId));
+}
+
 export const follow = (userId) => {
-	return (dispatch) => {
-		dispatch(toggleFollowingProgress(true, userId));
-		/* axios.delete(`https://social-network.samuraijs.com/api/1.0/follow/${u.id}`, {
-			withCredentials: true,
-			headers: { 'API-KEY': 'b6244e81-2d5a-4d23-ba7e-ce942eedbdec' }
-		}) */
-		userAPI.follow(userId)
-			.then(response => {
-				if (response.data.resultCode == 0) {
-					dispatch(followSuccess(userId));
-				}
-				dispatch(toggleFollowingProgress(false, userId));
-			});
+	return async (dispatch) => {
+		//let apiMethod = userAPI.follow.bind(userAPI);
+		//let actionCreator = followSuccess;
+		followUnfollowFlow(dispatch, userId, userAPI.follow.bind(userAPI), followSuccess);
+
+		// dispatch(toggleFollowingProgress(true, userId));
+		// /* axios.delete(`https://social-network.samuraijs.com/api/1.0/follow/${u.id}`, {
+		// 	withCredentials: true,
+		// 	headers: { 'API-KEY': 'b6244e81-2d5a-4d23-ba7e-ce942eedbdec' }
+		// }) */
+		// let response = await apiMethod(userId);
+		// //.then(response => {
+		// if (response.data.resultCode == 0) {
+		// 	dispatch(actionCreator(userId));
+		// }
+		// dispatch(toggleFollowingProgress(false, userId));
+		// //});
 	}
 };
+
 export const unfollow = (userId) => {
-	return (dispatch) => {
-		dispatch(toggleFollowingProgress(true, userId));
-		/* axios.post(`https://social-network.samuraijs.com/api/1.0/follow/${u.id}`, {}, {
-			withCredentials: true,
-			headers: { 'API-KEY': 'b6244e81-2d5a-4d23-ba7e-ce942eedbdec' }
-		}) */
-		userAPI.unfollow(userId)
-			.then(response => {
-				if (response.data.resultCode == 0) {
-					dispatch(unfollowSuccess(userId));
-				}
-				dispatch(toggleFollowingProgress(false, userId));
-			});
+	return async (dispatch) => {
+		//let apiMethod = userAPI.unfollow.bind(userAPI);
+		//let actionCreator = unfollowSuccess;
+		followUnfollowFlow(dispatch, userId, userAPI.unfollow.bind(userAPI), unfollowSuccess);
+
+		// dispatch(toggleFollowingProgress(true, userId));
+		// /* axios.post(`https://social-network.samuraijs.com/api/1.0/follow/${u.id}`, {}, {
+		// 	withCredentials: true,
+		// 	headers: { 'API-KEY': 'b6244e81-2d5a-4d23-ba7e-ce942eedbdec' }
+		// }) */
+		// let response = await apiMethod(userId);
+
+		// if (response.data.resultCode == 0) {
+		// 	dispatch(actionCreator(userId));
+		// }
+		// dispatch(toggleFollowingProgress(false, userId));
+
 	}
 };
 
 export default usersReducer;
+
+
+// const usersReducer = (state = initialState, action) => {
+// 	switch (action.type) {
+// 		//case 'FAKE': return { ...state, fake: state.fake + 1 }
+// 		case FOLLOW:
+// 			return {
+// 				...state,
+// 				//!users: [...state.users],
+// 				//!users: state.users.map(u => u),  - Две записи в коменнтах идентичны
+// 				users: state.users.map(u => {
+// 					if (u.id === action.userId) {
+// 						return { ...u, followed: true }
+// 					}
+// 					return u
+// 				})
+// 			}
+// 		case UNFOLLOW: {
+// 			return {
+// 				...state,
+// 				users: state.users.map(u => {
+// 					if (u.id === action.userId) {
+// 						return { ...u, followed: false }
+// 					}
+// 					return u
+// 				})
+// 			}
+// 		}
+// 		case SET_USERS: {
+// 			return { ...state, users: action.users }
+// 		}
+// 		case SET_CURRENT_PAGE: {
+// 			return { ...state, currentPage: action.currentPage }
+// 		}
+// 		case SET_TOTAL_USERS_COUNT: {
+// 			return { ...state, totalUsersCount: action.count }
+// 		}
+// 		case TOGGLE_IS_FETCHING: {
+// 			return { ...state, isFetching: action.isFetching }
+// 		}
+// 		case TOGGLE_IS_FOLLOWING_PROGRESS: {
+// 			return {
+// 				...state,
+// 				followingInProgress: action.isFetching
+// 					? [...state.followingInProgress, action.userId]
+// 					: state.followingInProgress.filter(id => id != action.userId)
+// 			}
+// 		}
+
+// 		default:
+// 			return state;
+// 	}
+
+// 	// if (action.type === ADD_POST) {
+// 	// 	let newPost = {
+// 	// 		id: 7,
+// 	// 		message: state.newPostText,
+// 	// 		LikesCount: 0
+// 	// 	};
+// 	// 	state.posts.push(newPost);
+// 	// 	state.newPostText = '';
+// 	// } else if (action.type === UPDATE_NEW_POST_TEXT) {
+// 	// 	state.newPostText = action.newText;
+// 	// }
+// 	// return state;
+// };
