@@ -11,7 +11,7 @@ let state = {
 	]
 };
 
-test.only('Length should show me STAR-CRAFT', () => {
+test('Length should show me STAR-CRAFT', () => {
 	//1.TEST data
 
 	let action = addPostActionCreator('IT-StarCraft Forever')
@@ -21,7 +21,7 @@ test.only('Length should show me STAR-CRAFT', () => {
 	expect(newState.posts.length).toBe(7);
 });
 
-test.only('after deleting lenght should be decrement', () => {
+test('after deleting lenght should be decrement', () => {
 	//1.TEST data
 
 	let action = deletePost(1)
@@ -30,7 +30,7 @@ test.only('after deleting lenght should be decrement', () => {
 	//3.TEST expectation
 	expect(newState.posts.length).toBe(5);
 });
-test.only('after deleting lenght should be decrement', () => {
+test('after deleting lenght should be decrement', () => {
 	//1.TEST data
 
 	let action = deletePost(1223)

@@ -1,11 +1,9 @@
 import reportWebVitals from './reportWebVitals';
-import store from './redux/store-redux';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
-import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import SamuraiJSApp from './App';
+
 
 // setInterval(() => {
 // 	store.dispatch({ type: 'FAKE' })
@@ -14,10 +12,7 @@ import { BrowserRouter } from 'react-router-dom';
 //addPost('SamuraiJs.com');
 
 ReactDOM.render(
-	<BrowserRouter>
-		<Provider store={store} ><App /></Provider >,
-	</BrowserRouter>, document.getElementById('root')
-
+	<SamuraiJSApp />, document.getElementById('root')
 );
 
 //! пофиксил ошибку обернув BrowserRouter в index.js урок 80
