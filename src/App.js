@@ -9,7 +9,7 @@ import { compose } from 'redux';
 import { initializeApp } from './redux/app-reducer';
 import Preloader from './components/common/Preloader/Preloader';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 import store from './redux/store-redux';
 import React, { Component, Suspense } from 'react';
 
@@ -70,11 +70,11 @@ const mapStateToProps = (state) => ({
 let AppContainer = compose(
 	withRouter,
 	connect(mapStateToProps, { initializeApp }))(App);
-
+//basename={`${process.env.PUBLIC_URL}`}
 const SamuraiJSApp = (props) => {
-	return <BrowserRouter basemname={process.env.PUBLIC_URL}>
+	return <HashRouter>
 		<Provider store={store} ><AppContainer /></Provider >,
-	</BrowserRouter>
+	</HashRouter>
 }
 
 export default SamuraiJSApp;
