@@ -45,6 +45,9 @@ export const profileAPI = {
 			//}
 			//} lesson 96
 		);
+	},
+	saveProfile(profile) {
+		return instance.put(`profile`, profile);
 	}
 };
 

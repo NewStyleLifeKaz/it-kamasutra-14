@@ -1,3 +1,4 @@
+import { stopSubmit } from "redux-form";
 import { profileAPI, userAPI } from "../components/api/api";
 
 const ADD_POST = 'ADD_POST';
@@ -5,6 +6,7 @@ const SET_USER_PROFILE = 'SET_USER_PROFILE';
 const SET_STATUS = 'SET_STATUS';
 const DELETE_POST = 'DELETE_POST';
 const SAVE_PHOTO_SUCCESS = 'SAVE_PHOTO_SUCCESS';
+const SAVE_PROFILE_SUCCESS = 'SAVE_PROFILE_SUCCESS';
 // const UPDATE_NEW_POST_TEXT = 'UPDATE_NEW_POST_TEXT';
 
 let initialState = {
@@ -58,6 +60,11 @@ const profileReducer = (state = initialState, action) => {
 				...state,
 				profile: { ...state.profile, photos: action.photos }
 			};
+		case SAVE_PROFILE_SUCCESS:
+			return {
+				...state,
+				profile: { ...state.profile, photos: action.photos }
+			};
 
 		default:
 			return state;
@@ -82,6 +89,7 @@ export const setUserProfile = (profile) => ({ type: SET_USER_PROFILE, profile })
 export const setStatus = (status) => ({ type: SET_STATUS, status });
 export const deletePost = (postID) => ({ type: DELETE_POST, postID });
 export const savePhotoSuccess = (photos) => ({ type: SAVE_PHOTO_SUCCESS, photos });
+export const saveProfileSuccess = (photos) => ({ type: SAVE_PHOTO_SUCCESS, photos });
 // export const updateNewPostTextActionCreator = (text) => ({ type: UPDATE_NEW_POST_TEXT, newText: text });
 
 export const getUserProfileThunk = (userId) => async (dispatch) => {
@@ -108,9 +116,19 @@ export const updateStatusThunk = (status) => async (dispatch) => {
 
 export const savePhotoThunk = (file) => async (dispatch) => {
 	let response = await profileAPI.savePhoto(file);
-
 	if (response.data.resultCode === 0) {
 		dispatch(savePhotoSuccess(response.data.data.photos))
+	}
+}
+export const saveProfileThunk = (profile) => async (dispatch, getState) => {
+	const userId = getState().auth.id;
+	const response = await profileAPI.saveProfile(profile);
+	if (response.data.resultCode === 0) {
+		dispatch(getUserProfileThunk(userId))
+	} else {
+		//dispatch(stopSubmit('edit-profile', { 'Contacts': { "facebook": response.data.messages[0] } }));
+		dispatch(stopSubmit('edit-profile', { _error: response.data.messages[0] }));
+		return Promise.reject(response.data.messages[0]);
 	}
 }
 
