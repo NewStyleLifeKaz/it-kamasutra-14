@@ -6,7 +6,7 @@ import { CreateField, Input } from "../common/FormsControls/FormsControls";
 import { requiredValidate } from "../Utils/validator/validators";
 import styles from './../common/FormsControls/FormsControls.module.css';
 
-const LoginPageForm = ({ handleSubmit, error }) => {
+const LoginPageForm = ({ handleSubmit, error, captchaUrl }) => {
 	return (
 		<form onSubmit={handleSubmit}>
 			{/* <div>
@@ -21,6 +21,8 @@ const LoginPageForm = ({ handleSubmit, error }) => {
 			{/* <div>
 				<Field component={Input} type={'checkbox'} name={'rememberMe'} />remember me
 			</div> */}
+			{captchaUrl && <img src={captchaUrl} />}
+			{captchaUrl && CreateField('Symbols type', 'captcha', [requiredValidate], Input, {})}
 			{error && <div className={styles.formSummaryError}>
 				{error}
 			</div>}
@@ -33,18 +35,19 @@ const LoginPageReduxForm = reduxForm({ form: 'login' })(LoginPageForm);
 
 const LoginPage = (props) => {
 	const onSubmit = (formData) => {
-		props.login(formData.email, formData.password, formData.rememberMe);
+		props.login(formData.email, formData.password, formData.rememberMe, formData.captcha);
 	}
 	if (props.isAuth) {
 		return <Redirect to={'/profile'} />
 	}
 	return <div>
 		<h1>Login</h1>
-		<LoginPageReduxForm onSubmit={onSubmit} />
+		<LoginPageReduxForm onSubmit={onSubmit} captchaUrl={props.captchaUrl} />
 	</div>
 }
 
 let mapStateToProps = (state) => ({
+	captchaUrl: state.auth.captchaUrl,
 	isAuth: state.auth.isAuth
 })
 
