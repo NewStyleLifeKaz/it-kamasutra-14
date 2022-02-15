@@ -9,9 +9,10 @@ import { compose } from 'redux';
 import { initializeApp } from './redux/app-reducer';
 import Preloader from './components/common/Preloader/Preloader';
 import { Provider } from 'react-redux';
-import { HashRouter } from 'react-router-dom';
+//import { HashRouter } from 'react-router-dom';
 import store from './redux/store-redux';
 import React, { Component, Suspense } from 'react';
+import { BrowserRouter, Redirect, Switch } from 'react-router-dom/cjs/react-router-dom.min';
 
 //Lesson 94
 //import DialogsContainer from './components/Dialogs/DialogsContainer';
@@ -45,14 +46,21 @@ class App extends Component {
 					<Route path="/News" />
 					<Route path="/Music" />
 					<Route path="/Settings" /> */}
+
 					<Suspense fallback={<Preloader />}>
-						<Route /* exact */ path="/dialogs" render={() => <DialogsContainer />} />
-						<Route path="/profile/:userId?" render={() => <ProfileContainer />} />
-						<Route path="/users" render={() => <UsersContainer />} />
-						<Route path="/login" render={() => <LoginPage />} />
-						<Route path="/news" />
-						<Route path="/music" />
-						<Route path="/settings" />
+						<Switch>
+							<Redirect exact from="/" to="/profile" />
+							{/* <Switch></Switch>    Same like  "exact"  lesson 99     */}
+							<Route /* exact */ path="/dialogs" render={() => <DialogsContainer />} />
+							<Route path="/profile/:userId?" render={() => <ProfileContainer />} />
+							<Route path="/users" render={() => <UsersContainer />} />
+							<Route path="/login/facebook" render={() => <div>Facebook</div>} />
+							<Route path="/login" render={() => <LoginPage />} />
+							<Route path="/news" />
+							<Route path="/music" />
+							<Route path="/settings" />
+							<Route exact path="*" render={() => <div>404 not found</div>} />
+						</Switch>
 					</Suspense>
 
 				</div>
@@ -72,9 +80,9 @@ let AppContainer = compose(
 	connect(mapStateToProps, { initializeApp }))(App);
 //basename={`${process.env.PUBLIC_URL}`}
 const SamuraiJSApp = (props) => {
-	return <HashRouter>
+	return <BrowserRouter>
 		<Provider store={store} ><AppContainer /></Provider >,
-	</HashRouter>
+	</BrowserRouter>
 }
 
 export default SamuraiJSApp;
