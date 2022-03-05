@@ -50,6 +50,7 @@ class App extends Component {
 					<Suspense fallback={<Preloader />}>
 						<Switch>
 							<Redirect exact from="/" to="/profile" />
+							<Redirect exact from="/it-kamasutra-14" to="/profile" />
 							{/* <Switch></Switch>    Same like  "exact"  lesson 99     */}
 							<Route /* exact */ path="/dialogs" render={() => <DialogsContainer />} />
 							<Route path="/profile/:userId?" render={() => <ProfileContainer />} />
