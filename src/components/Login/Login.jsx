@@ -43,6 +43,10 @@ const LoginPage = (props) => {
 	return <div>
 		<h1>Login</h1>
 		<LoginPageReduxForm onSubmit={onSubmit} captchaUrl={props.captchaUrl} />
+		<div className={styles.password}>
+			<div>Email: free@samuraijs.com</div>
+			<div>Password: free</div>
+		</div>
 	</div>
 }
 
